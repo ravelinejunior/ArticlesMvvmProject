@@ -1,60 +1,84 @@
 package br.com.example.articlesmvvmproject.presentation.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.example.articlesmvvmproject.MainActivity
 import br.com.example.articlesmvvmproject.R
+import br.com.example.articlesmvvmproject.data.util.Resource
+import br.com.example.articlesmvvmproject.databinding.FragmentNewsBinding
+import br.com.example.articlesmvvmproject.presentation.adapter.NewsAdapter
+import br.com.example.articlesmvvmproject.presentation.viewmodel.NewsViewModel
+import com.google.android.material.snackbar.Snackbar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NewsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NewsFragment() : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding: FragmentNewsBinding
+    lateinit var viewModel: NewsViewModel
+    private lateinit var newsAdapter: NewsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NewsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
+        binding = FragmentNewsBinding.bind(view)
+        initRecyclerView()
+        viewNewsHeadlinesList()
+
+    }
+
+    private fun initRecyclerView() {
+        newsAdapter = NewsAdapter()
+        binding.recyclerViewNewsFragment.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = newsAdapter
+        }
+
+    }
+
+    private fun viewNewsHeadlinesList() {
+        viewModel.getNewsHeadlines("br", 1)
+        viewModel.newsHeadLines.observe(viewLifecycleOwner, { newsResponse ->
+            when (newsResponse) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    //utilizar o diffUtil para preencher a lista com os dados da requisição
+                    newsResponse.data?.let { news ->
+                        newsAdapter.differ.submitList(news.articles.toList())
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    showSnackbar(newsResponse.message.toString())
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
                 }
             }
+        })
     }
+
+    private fun showProgressBar() {
+        binding.progressBarNewsFragment.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBarNewsFragment.visibility = View.GONE
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setTextColor(resources.getColor(R.color.white)).show()
+    }
+
+
 }

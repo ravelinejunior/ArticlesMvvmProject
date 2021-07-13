@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewsFragment">
+    android:orientation="vertical"
+    tools:context="br.com.example.articlesmvvmproject.presentation.fragment.NewsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_news_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/news_fragment" />
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        />
 
-</FrameLayout>
+    <ProgressBar
+        android:id="@+id/progressBar_news_fragment"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/purple_500"
+        android:indeterminateTintMode="multiply"
+        android:indeterminate="true"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:indeterminateBehavior="cycle"
+        />
+</LinearLayout>
