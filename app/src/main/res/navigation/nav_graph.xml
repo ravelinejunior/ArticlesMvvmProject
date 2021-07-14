@@ -26,5 +26,9 @@
         android:id="@+id/infoFragment_nav"
         android:name="br.com.example.articlesmvvmproject.presentation.fragment.InfoFragment"
         android:label="fragment_info"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info" >
+        <argument
+            android:name="selected_article"
+            app:argType="br.com.example.articlesmvvmproject.data.model.Article" />
+    </fragment>
 </navigation>

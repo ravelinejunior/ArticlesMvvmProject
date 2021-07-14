@@ -2,11 +2,10 @@ package br.com.example.articlesmvvmproject.presentation.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.example.articlesmvvmproject.MainActivity
@@ -43,9 +42,21 @@ class NewsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //pegar os dois valores da injeção criada na mainAcitivity
+        binding = FragmentNewsBinding.bind(view)
         viewModel = (activity as MainActivity).viewModel
         newsAdapter = (activity as MainActivity).newsAdapter
-        binding = FragmentNewsBinding.bind(view)
+        newsAdapter.setOnItemClickListener {
+
+            val bundle = Bundle().apply {
+                putSerializable("selected_article",it)
+            }
+
+            findNavController().navigate(
+                R.id.action_newsFragment_to_infoFragment,bundle
+            )
+
+        }
+
         initRecyclerView()
         viewNewsHeadlinesList()
 
@@ -120,10 +131,8 @@ class NewsFragment() : Fragment() {
                 binding.recyclerViewNewsFragment.layoutManager as LinearLayoutManager
             val sizeOfCurrentList = layoutManager.itemCount
             val visibleItems = layoutManager.childCount
-            Log.i(TAG, "Visible Items $visibleItems")
             //recuperar a position do primeiro item que aparece apos ser scrollado
             val topPosition = layoutManager.findFirstVisibleItemPosition()
-            Log.i(TAG, "Top position $topPosition")
             val hasReachedToEnd = topPosition + visibleItems >= sizeOfCurrentList
             val shouldPaginate = !isLoading && !isLastPage && hasReachedToEnd && isScrolling
 
@@ -138,6 +147,7 @@ class NewsFragment() : Fragment() {
     companion object {
         const val TAG = "TAG_INFO"
     }
+
 
 
 }

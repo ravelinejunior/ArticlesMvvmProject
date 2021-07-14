@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.android.extensions'
 }
 
 android {
@@ -44,6 +45,10 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+    }
+
+    androidExtensions {
+        experimental = true
     }
 }
 

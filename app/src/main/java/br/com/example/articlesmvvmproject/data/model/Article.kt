@@ -3,6 +3,8 @@ package br.com.example.articlesmvvmproject.data.model
 
 import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
 
 @Entity(tableName = "articles_tb")
 data class Article(
@@ -22,4 +24,4 @@ data class Article(
     val url: String,
     @SerializedName("urlToImage")
     val urlToImage: String?
-)
+) : Serializable
