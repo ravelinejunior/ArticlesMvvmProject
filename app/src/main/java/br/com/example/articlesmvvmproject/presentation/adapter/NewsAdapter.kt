@@ -47,7 +47,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.MyViewHolder>() {
                 tvTitle.text = article.title
                 tvDescription.text = article.description
                 tvPublishedAt.text = article.publishedAt
-                tvSource.text = article.source.name
+                tvSource.text = article.source?.name
                 tvAuthor.text = article.author
 
                 if(article.urlToImage?.isNotEmpty() == true || article.urlToImage != null){

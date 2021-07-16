@@ -6,19 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import br.com.example.articlesmvvmproject.MainActivity
 import br.com.example.articlesmvvmproject.R
 import br.com.example.articlesmvvmproject.databinding.FragmentInfoBinding
+import br.com.example.articlesmvvmproject.presentation.viewmodel.NewsViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class InfoFragment : Fragment() {
-    lateinit var binding: FragmentInfoBinding
+    private lateinit var binding: FragmentInfoBinding
+    private lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +35,7 @@ class InfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentInfoBinding.bind(view)
+        viewModel = (activity as MainActivity).viewModel
 
         //recupera o bundle via nav graph
         val args: InfoFragmentArgs by navArgs()
@@ -40,14 +44,23 @@ class InfoFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             binding.webViewInfoFragment.apply {
                 webViewClient = WebViewClient()
-                if (article.url.isNotEmpty())
+                if (article.url?.isNotEmpty()!!)
                     loadUrl(article.url)
                 visibility = VISIBLE
             }
 
             binding.progressBarInfoFragment.visibility = View.GONE
-
+        }
+        binding.fabInfoFragment.setOnClickListener {
+            viewModel.saveArticle(article)
+            showSnackBar("Successfully saved.")
         }
     }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setTextColor(resources.getColor(R.color.white)).show()
+    }
+
 
 }

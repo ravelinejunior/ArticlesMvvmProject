@@ -1,8 +1,10 @@
 package br.com.example.articlesmvvmproject.presentation.di
 
 import br.com.example.articlesmvvmproject.domain.repository.NewsRepository
+import br.com.example.articlesmvvmproject.domain.usecase.DeleteSavedNewsUseCase
 import br.com.example.articlesmvvmproject.domain.usecase.GetNewsHeadlinesUseCase
 import br.com.example.articlesmvvmproject.domain.usecase.GetSearchedNewsUseCase
+import br.com.example.articlesmvvmproject.domain.usecase.SaveNewsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,22 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ): GetSearchedNewsUseCase {
         return GetSearchedNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSaveNewsUseCase(
+        newsRepository: NewsRepository
+    ): SaveNewsUseCase {
+        return SaveNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteNewsUseCase(
+        newsRepository: NewsRepository
+    ): DeleteSavedNewsUseCase {
+        return DeleteSavedNewsUseCase(newsRepository)
     }
 
 }

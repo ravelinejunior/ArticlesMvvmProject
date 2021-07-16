@@ -32,6 +32,22 @@
 
     </WebView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_info_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="#880E4F"
+        app:rippleColor="@color/white"
+        app:backgroundTintMode="add"
+        style="@style/CustomFloatingActionButton"
+        android:src="@drawable/ic_baseline_add_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/app_name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

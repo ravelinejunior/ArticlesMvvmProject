@@ -8,17 +8,19 @@ import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import br.com.example.articlesmvvmproject.data.model.Article
 import br.com.example.articlesmvvmproject.data.model.News
 import br.com.example.articlesmvvmproject.data.util.Resource
-import br.com.example.articlesmvvmproject.domain.usecase.GetNewsHeadlinesUseCase
-import br.com.example.articlesmvvmproject.domain.usecase.GetSearchedNewsUseCase
+import br.com.example.articlesmvvmproject.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
     private val app: Application,
-    private val getSearchedNewsUseCase: GetSearchedNewsUseCase
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
+    private val saveNewsUseCase: SaveNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<News>> = MutableLiveData()
     val searchedNews: MutableLiveData<Resource<News>> = MutableLiveData()
@@ -60,6 +62,16 @@ class NewsViewModel(
             }
 
         }
+
+    //local data
+    //lembrar de atualizar o viewModel factory
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        saveNewsUseCase.execute(article)
+    }
+
+    fun deleteArticle(article: Article)= viewModelScope.launch {
+        deleteSavedNewsUseCase.execute(article)
+    }
 
     private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false

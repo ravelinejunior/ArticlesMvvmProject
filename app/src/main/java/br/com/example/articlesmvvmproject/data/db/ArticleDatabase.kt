@@ -8,7 +8,7 @@ import br.com.example.articlesmvvmproject.data.model.Article
 
 @Database(entities = [Article::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
-abstract class Database : RoomDatabase() {
+abstract class ArticleDatabase : RoomDatabase() {
     abstract fun getArticleDao(): ArticleDao
 
 }
