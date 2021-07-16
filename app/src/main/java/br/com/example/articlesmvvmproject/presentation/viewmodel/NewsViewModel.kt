@@ -7,12 +7,14 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import br.com.example.articlesmvvmproject.data.model.Article
 import br.com.example.articlesmvvmproject.data.model.News
 import br.com.example.articlesmvvmproject.data.util.Resource
 import br.com.example.articlesmvvmproject.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
@@ -20,7 +22,8 @@ class NewsViewModel(
     private val app: Application,
     private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
     private val saveNewsUseCase: SaveNewsUseCase,
-    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase
 ) : AndroidViewModel(app) {
     val newsHeadLines: MutableLiveData<Resource<News>> = MutableLiveData()
     val searchedNews: MutableLiveData<Resource<News>> = MutableLiveData()
@@ -69,9 +72,17 @@ class NewsViewModel(
         saveNewsUseCase.execute(article)
     }
 
-    fun deleteArticle(article: Article)= viewModelScope.launch {
+    fun deleteArticle(article: Article) = viewModelScope.launch {
         deleteSavedNewsUseCase.execute(article)
     }
+
+    fun getSavedArticles() = liveData {
+        getSavedNewsUseCase.execute().collect{
+            emit(it)
+        }
+
+    }
+
 
     private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false

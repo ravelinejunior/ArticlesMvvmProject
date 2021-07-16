@@ -1,10 +1,8 @@
 package br.com.example.articlesmvvmproject.data.db.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import br.com.example.articlesmvvmproject.data.model.Article
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ArticleDao {
@@ -14,6 +12,10 @@ interface ArticleDao {
 
     @Delete
     suspend fun deleteArticle(article: Article)
+
+    @Query("SELECT * FROM ARTICLES_TB")
+    fun getAllSavedArticles():Flow<List<Article>>
+
 
 
 }

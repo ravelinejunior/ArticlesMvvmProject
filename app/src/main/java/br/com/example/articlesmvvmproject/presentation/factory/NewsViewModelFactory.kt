@@ -3,10 +3,7 @@ package br.com.example.articlesmvvmproject.presentation.factory
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import br.com.example.articlesmvvmproject.domain.usecase.DeleteSavedNewsUseCase
-import br.com.example.articlesmvvmproject.domain.usecase.GetNewsHeadlinesUseCase
-import br.com.example.articlesmvvmproject.domain.usecase.GetSearchedNewsUseCase
-import br.com.example.articlesmvvmproject.domain.usecase.SaveNewsUseCase
+import br.com.example.articlesmvvmproject.domain.usecase.*
 import br.com.example.articlesmvvmproject.presentation.viewmodel.NewsViewModel
 
 class NewsViewModelFactory(
@@ -14,7 +11,8 @@ class NewsViewModelFactory(
     private val app: Application,
     private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
     private val saveNewsUseCase: SaveNewsUseCase,
-    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return NewsViewModel(
@@ -22,7 +20,8 @@ class NewsViewModelFactory(
             app,
             getSearchedNewsUseCase,
             saveNewsUseCase,
-            deleteSavedNewsUseCase
+            deleteSavedNewsUseCase,
+            getSavedNewsUseCase
         ) as T
     }
 }
