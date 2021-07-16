@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private val country = "br"
     private val mPage = 1
 
-
     @Inject
     lateinit var factory: NewsViewModelFactory
 
@@ -40,6 +39,9 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        setSupportActionBar(binding.toolbarMain)
+        binding.toolbarMain.setTitleTextColor(resources.getColor(R.color.white))
+
         binding.bnvMain.setupWithNavController(navController)
     }
 
@@ -47,8 +49,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.refresh_menu,menu)
         return super.onCreateOptionsMenu(menu)
     }
-
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

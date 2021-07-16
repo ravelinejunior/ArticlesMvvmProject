@@ -1,9 +1,9 @@
 package br.com.example.articlesmvvmproject.presentation.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AbsListView
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +15,9 @@ import br.com.example.articlesmvvmproject.databinding.FragmentNewsBinding
 import br.com.example.articlesmvvmproject.presentation.adapter.NewsAdapter
 import br.com.example.articlesmvvmproject.presentation.viewmodel.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NewsFragment() : Fragment() {
 
@@ -48,17 +51,18 @@ class NewsFragment() : Fragment() {
         newsAdapter.setOnItemClickListener {
 
             val bundle = Bundle().apply {
-                putSerializable("selected_article",it)
+                putSerializable("selected_article", it)
             }
 
             findNavController().navigate(
-                R.id.action_newsFragment_to_infoFragment,bundle
+                R.id.action_newsFragment_to_infoFragment, bundle
             )
 
         }
 
         initRecyclerView()
         viewNewsHeadlinesList()
+        setSearchView()
 
     }
 
@@ -80,10 +84,73 @@ class NewsFragment() : Fragment() {
                     //utilizar o diffUtil para preencher a lista com os dados da requisição
                     newsResponse.data?.let { news ->
                         newsAdapter.differ.submitList(news.articles.toList())
-                        if (news.totalResults % 20 == 0) {
-                            pages = news.totalResults / 20
+                        pages = if (news.totalResults % 20 == 0) {
+                            news.totalResults / 20
                         } else {
-                            pages = news.totalResults / 20 + 1
+                            news.totalResults / 20 + 1
+                        }
+
+                        isLastPage = page == pages
+                    }
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    showSnackBar(newsResponse.message.toString())
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
+    }
+
+    //search
+    private fun setSearchView() {
+        binding.searchViewNewsFragmentId.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                //setar função que observa a variavel com viewModel do searchview
+                viewModel.getSearchNews(query.toString(), "br", 1)
+                viewSearchedNews()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //mainScope é utilizado para UI, quando for apresentar algum dado direto para o usuario
+                MainScope().launch {
+
+                    delay(3000L)
+                    //setar função que observa a variavel com viewModel do searchview
+                    viewModel.getSearchNews(newText.toString(), "br", 1)
+                    viewSearchedNews()
+                }
+
+                return false
+            }
+        })
+
+        //reiniciar adapter chamando o recycler view novamente
+        binding.searchViewNewsFragmentId.setOnCloseListener {
+            initRecyclerView()
+            viewNewsHeadlinesList()
+            false
+        }
+
+    }
+
+    private fun viewSearchedNews() {
+
+        viewModel.searchedNews.observe(viewLifecycleOwner, { newsResponse ->
+            when (newsResponse) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    //utilizar o diffUtil para preencher a lista com os dados da requisição
+                    newsResponse.data?.let { news ->
+                        newsAdapter.differ.submitList(news.articles.toList())
+                        pages = if (news.totalResults % 20 == 0) {
+                            news.totalResults / 20
+                        } else {
+                            news.totalResults / 20 + 1
                         }
 
                         isLastPage = page == pages
@@ -147,7 +214,6 @@ class NewsFragment() : Fragment() {
     companion object {
         const val TAG = "TAG_INFO"
     }
-
 
 
 }

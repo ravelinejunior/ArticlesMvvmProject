@@ -2,6 +2,7 @@ package br.com.example.articlesmvvmproject.presentation.di
 
 import android.app.Application
 import br.com.example.articlesmvvmproject.domain.usecase.GetNewsHeadlinesUseCase
+import br.com.example.articlesmvvmproject.domain.usecase.GetSearchedNewsUseCase
 import br.com.example.articlesmvvmproject.presentation.factory.NewsViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -17,9 +18,10 @@ class FactoryModule {
     @Provides
     fun provideNewsViewModelFactory(
         application: Application,
-        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+        getSearchedNewsUseCase: GetSearchedNewsUseCase
     ): NewsViewModelFactory {
-        return NewsViewModelFactory(getNewsHeadlinesUseCase, application)
+        return NewsViewModelFactory(getNewsHeadlinesUseCase, application,getSearchedNewsUseCase)
     }
 
 

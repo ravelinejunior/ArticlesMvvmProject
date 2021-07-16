@@ -8,13 +8,29 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApiService {
+
+
     @GET("top-headlines")
     suspend fun getTopHeadlines(
         @Query("country")
-        country:String,
+        country: String,
         @Query("page")
-        page:Int,
+        page: Int,
         @Query("apiKey")
-        apiKey:String = BuildConfig.API_KEY
-    ):Response<News>
+        apiKey: String = BuildConfig.API_KEY
+    ): Response<News>
+
+    @GET("top-headlines")
+    suspend fun getTopHeadlinesSearched(
+        @Query("q")
+        query: String,
+        @Query("country")
+        country: String,
+        @Query("page")
+        page: Int,
+        @Query("apiKey")
+        apiKey: String = BuildConfig.API_KEY
+    ): Response<News>
+
+
 }

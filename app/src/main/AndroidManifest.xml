@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.ArticlesMvvmProject">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="@string/mais_visualizados"
+            android:theme="@style/PrimaryCustomTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

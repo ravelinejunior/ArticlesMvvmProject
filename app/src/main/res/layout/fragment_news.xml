@@ -7,6 +7,13 @@
     tools:context="br.com.example.articlesmvvmproject.presentation.fragment.NewsFragment">
 
 
+    <SearchView
+        android:id="@+id/searchView_news_fragment_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_news_fragment"
         android:layout_width="match_parent"

@@ -8,6 +8,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/white"
+        android:background="@android:color/holo_red_light"
+        />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -22,6 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        app:backgroundTint="#B2FFFFFF"
+        app:itemIconTint="@android:color/holo_red_light"
+        app:itemRippleColor="@android:color/holo_red_light"
+        app:itemTextColor="@android:color/holo_red_light"
         app:menu="@menu/bottom_menu" />
 
 </LinearLayout>
